@@ -8,22 +8,33 @@ class MouseCoords:
         self.x = x
         self.y = y
 
-    def move_head(self, event):
-        c.move(bodypart, event.x - self.x, event.y - self.y)
-        self.x = event.x
-        self.y = event.y
+    def move_head(self, x, y):
+        frame.move(bodypart, vx, vy)
+        self.x = x
+        self.y = y
 
-def handle_mouse_event(event):
-    print(currentMouseCoords.x, " ", currentMouseCoords.y)
-    currentMouseCoords.move_head(event)
+def handle_mouse_event(event):    
+    currentMouseCoords.move_head(event.x, event.y)    
     return(event.x, event.y)
 
-gui=Tk()
-c=Canvas(gui, width=800, height=800, bg='white')
+def move():
+    frame.move(bodypart, vx, vy)
+    gui.after(delay, move) 
+    
+
+gui = Tk()
+frame = Canvas(gui, width = 800, height = 800, bg = 'white')
 
 currentMouseCoords = MouseCoords(10, 10)
-bodypart= c.create_rectangle(currentMouseCoords.x,currentMouseCoords.y,20,20, fill='black')
-c.bind('<Motion>', handle_mouse_event)
+dv = 20
+vx = 20
+vy = 30
+delay = 250
+bodypart = frame.create_rectangle(currentMouseCoords.x, currentMouseCoords.y, 20, 20, fill = 'black')
 
-c.pack()
+frame.bind('<Motion>', handle_mouse_event)    
+frame.pack()
+
+gui.after(delay, move)
 gui.mainloop()
+
